@@ -1,0 +1,1 @@
+﻿Select SpamId from Spam where MoNumber='9999999999';

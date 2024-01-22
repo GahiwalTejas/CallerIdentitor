@@ -18,6 +18,7 @@ namespace numberDetector.Models
         public TrueCallerEntities1()
             : base("name=TrueCallerEntities1")
         {
+            this.Configuration.LazyLoadingEnabled = false;
         }
     
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

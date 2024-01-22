@@ -12,9 +12,32 @@ using numberDetector.Models;
 
 namespace numberDetector.Controllers
 {
+    [RoutePrefix("api/Users")]
     public class UsersController : ApiController
     {
         private TrueCallerEntities1 db = new TrueCallerEntities1();
+        //api/Users/Login
+        [Route("Login")]
+        [HttpPost]
+        public IHttpActionResult Login([FromBody] User user)
+        {
+            var UserBy = (from users in db.Users
+                          where users.Email == user.Email && users.Password == user.Password
+                          select users).FirstOrDefault();
+
+            if (UserBy != null)
+            {
+                return Ok(UserBy);
+            }
+            else
+            {
+                return NotFound();
+            }
+
+
+        }
+
+
 
         // GET: api/Users
         public IQueryable<User> GetUsers()
@@ -70,19 +93,23 @@ namespace numberDetector.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/Users
-        [ResponseType(typeof(User))]
-        public IHttpActionResult PostUser(User user)
+        // POST: api/Users/Registration
+        [HttpPost]
+        [Route("Registration")]
+
+        public String Registration([FromBody] User user)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return "Invalid Credential";
             }
 
             db.Users.Add(user);
-            db.SaveChanges();
-
-            return CreatedAtRoute("DefaultApi", new { id = user.UserId }, user);
+            if (db.SaveChanges() != 0)
+                // return Ok(user);
+                return "Registration Successfully";
+            else
+                return "Invalid Credential";
         }
 
         // DELETE: api/Users/5

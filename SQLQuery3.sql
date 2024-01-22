@@ -1,0 +1,1 @@
+﻿insert into Spam (MoNumber,UserId) values ("55211148521",1);

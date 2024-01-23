@@ -1,0 +1,1 @@
+﻿Select Name,email from Contacts where Contacts.MoNumber Like '9%'

@@ -1,45 +1,41 @@
 import React, { useState } from "react";
-import ContactLogo from "../components/Logo/ContactLogo";
-import { Link, useNavigate } from "react-router-dom";
+import Input from "./Input";
+import Button from "./Button";
 import { useForm } from "react-hook-form";
-import Input from "../components/Input";
-import Toaster from "../components/Toaster";
-import Button from "../components/Button";
-import { useSelector } from "react-redux";
-function UserInfo() {
-  const [error, setError] = useState(" ");
-  const [showToaster, setShowToaster] = useState(false);
-  const userInfo = useSelector((state) => {
-    console.log(state);
-    console.log(state.auth);
-    console.log(state.auth.userData);
-    return state.auth.userData;
-  });
+import { Link, useNavigate } from "react-router-dom";
+import Logo from "./Logo/Logo";
+import Toaster from "./Toaster";
 
-  const { register, handleSubmit } = useForm();
+function Signup() {
   const navigate = useNavigate();
-  console.log(userInfo);
-  const id = userInfo.id;
+  const [error, setError] = useState("");
+  const { register, handleSubmit } = useForm();
+  const [showToaster, setShowToaster] = useState(false);
+
   const create = async (data) => {
+    setError(" ");
     debugger;
-    fetch(`http://localhost:63965/api/Contacts/${id}`, {
-      method: "POST", // *GET, POST, PUT, DELETE, etc.
-      headers: {
-        "Content-Type": "application/json",
-        // 'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: JSON.stringify(data), // body data type must match "Content-Type" header
-    })
-      .then((resp) => resp.json())
-      .then((resp) => {
-        console.log(resp);
-        navigate("/userInfo");
-        setError(" ");
+    try {
+      fetch("http://localhost:63965/api/Users/Registration", {
+        method: "POST", // *GET, POST, PUT, DELETE, etc.
+
+        headers: {
+          "Content-Type": "application/json",
+          // 'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: JSON.stringify(data),
       })
-      .catch((err) => {
-        console.log(err);
-        setError(err);
-      });
+        .then((resp) => resp.json())
+        .then((resp) => {
+          if (resp) {
+            setShowToaster(true);
+            navigate("/login");
+          } else setError("Registration Failed....");
+        });
+    } catch (error) {
+      console.log(error);
+      setError("Registration Failed......", error);
+    }
   };
 
   return (
@@ -49,17 +45,25 @@ function UserInfo() {
       >
         <div className="mb-2 flex justify-center">
           <span className="inline-block w-full max-w-[100px]">
-            <ContactLogo width="100%" />
+            <Logo width="100%" />
           </span>
         </div>
         <h2 className="text-center text-2xl font-bold leading-tight">
-          Save Your Contacts
+          Sign up to create account
         </h2>
-
+        <p className="mt-2 text-center text-base text-black/60">
+          Already have an account?&nbsp;
+          <Link
+            to="/login"
+            className="font-medium text-primary transition-all duration-200 hover:underline"
+          >
+            Sign In
+          </Link>
+        </p>
         {error && <p className="text-red-600 mt-8 text-center">{error}</p>}
         {showToaster && (
           <Toaster
-            message="Contact Details save"
+            message="Registration successful"
             type="green"
             onClose={() => setShowToaster(false)}
           />
@@ -99,9 +103,16 @@ function UserInfo() {
                 },
               })}
             />
-
+            <Input
+              label="Password: "
+              type="password"
+              placeholder="Enter your password"
+              {...register("password", {
+                required: true,
+              })}
+            />
             <Button type="submit" className="w-full">
-              Add Contact
+              Create Account
             </Button>
           </div>
         </form>
@@ -110,4 +121,4 @@ function UserInfo() {
   );
 }
 
-export default UserInfo;
+export default Signup;

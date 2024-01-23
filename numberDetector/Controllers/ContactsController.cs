@@ -12,6 +12,7 @@ using numberDetector.Models;
 
 namespace numberDetector.Controllers
 {
+    [RoutePrefix("api/Contacts")]
     public class ContactsController : ApiController
     {
         private TrueCallerEntities1 db = new TrueCallerEntities1();
@@ -72,13 +73,13 @@ namespace numberDetector.Controllers
 
         // POST: api/Contacts
         [ResponseType(typeof(Contact))]
-        public IHttpActionResult PostContact(Contact contact)
+        public IHttpActionResult PostContact(int id,[Frombody]Contact contact)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
+            contact.UserId= id;
             db.Contacts.Add(contact);
             db.SaveChanges();
 

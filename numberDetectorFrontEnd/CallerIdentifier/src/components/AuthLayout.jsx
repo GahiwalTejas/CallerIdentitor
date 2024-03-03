@@ -8,10 +8,11 @@ export default function Protected({ children, authentication = true }) {
   const authStatus = useSelector((state) => state.auth.status);
 
   useEffect(() => {
+    console.log("inside auth");
     if (authentication && authStatus !== authentication) {
       navigate("/login");
     } else if (!authentication && authStatus !== authentication) {
-      navigate("/");
+      navigate("");           //toaster work now when navigate("/") is changed...
     }
     setLoader(false);
   }, [authStatus, navigate, authentication]);

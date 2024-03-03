@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useId } from "react";
 
 const SearchComponent = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(false);
+  const id=useId()
 
   const handleInputChange = (e) => {
     const value = e.target.value;
@@ -84,8 +85,8 @@ const SearchComponent = () => {
               <ul className="list-disc pl-6">
                 {searchResults.map((item) => (
                   <li
-                    key={item}
-                    id={item}
+                    key={id}
+                    id={id}
                     className="bg-blue-100 hover:bg-blue-200 text-blue-800 cursor-pointer"
                   >
                     {item}

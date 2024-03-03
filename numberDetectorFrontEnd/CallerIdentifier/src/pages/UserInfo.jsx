@@ -3,7 +3,7 @@ import ContactLogo from "../components/Logo/ContactLogo";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import Input from "../components/Input";
-import Toaster from "../components/Toaster";
+import Toaster from "../components/toaster/Toaster";
 import Button from "../components/Button";
 import { useSelector } from "react-redux";
 function UserInfo() {

@@ -7,16 +7,19 @@ import Toaster from "../components/toaster/Toaster";
 import Button from "../components/Button";
 import { useSelector } from "react-redux";
 function UserInfo() {
-  const [error, setError] = useState(" ");
-  const [showToaster, setShowToaster] = useState(false);
+  const [error, setError] = useState("");
+  const [showToast, setShowToast] = useState(false);
   const userInfo = useSelector((state) => {
     console.log(state);
     console.log(state.auth);
     console.log(state.auth.userData);
     return state.auth.userData;
   });
-
-  const { register, handleSubmit } = useForm();
+  const handleClose=()=>{
+    reset()
+    setShowToast(false)
+  }
+  const { register, handleSubmit ,reset,formState: { errors } } = useForm();
   const navigate = useNavigate();
   console.log(userInfo);
   const id = userInfo.id;
@@ -33,12 +36,29 @@ function UserInfo() {
       .then((resp) => resp.json())
       .then((resp) => {
         console.log(resp);
-        navigate("/userInfo");
-        setError(" ");
+        setShowToast(true); 
+
+        setTimeout(()=>{
+          setShowToast(false); 
+
+     },5000)
+      //  navigate("/userInfo");
+       // setError("");
+      }).then(()=>{
+        setTimeout(() => {
+          reset()
+          navigate("/userInfo");
+        }, 1000); // Redirect after 3 seconds
       })
       .catch((err) => {
         console.log(err);
         setError(err);
+
+        setShowToast(true)
+        setTimeout(()=>{
+          setShowToast(false); 
+
+     },5000)
       });
   };
 
@@ -56,14 +76,9 @@ function UserInfo() {
           Save Your Contacts
         </h2>
 
-        {error && <p className="text-red-600 mt-8 text-center">{error}</p>}
-        {showToaster && (
-          <Toaster
-            message="Contact Details save"
-            type="green"
-            onClose={() => setShowToaster(false)}
-          />
-        )}
+        {showToast && <Toaster text={error ? "Invalid Contact Details" : "Contact Save Successfully"}
+className={error ? 'bg-red-500 text-white' : 'bg-green-500 text-white'}
+onClick={handleClose}/>} {/* Render toaster conditionally */}
         <form onSubmit={handleSubmit(create)}>
           <div className="space-y-5">
             <Input
@@ -92,6 +107,14 @@ function UserInfo() {
               placeholder="Enter your Mobile Number"
               {...register("MoNumber", {
                 required: true,
+                minLength: {
+                  value: 10,
+                  message: "Mobile Number must be at least 10 characters long",
+                },
+                maxLength: {
+                  value: 10,
+                  message: "Mobile Number must be at least 10 characters long",
+                },
                 validate: {
                   matchPatern: (value) =>
                     /(\+)?(91)?( )?[789]\d{9}/g.test(value) ||
@@ -99,6 +122,9 @@ function UserInfo() {
                 },
               })}
             />
+             {errors.MoNumber && (
+              <p className="text-red-500">{errors.MoNumber.message}</p>
+            )}
 
             <Button type="submit" className="w-full">
               Add Contact

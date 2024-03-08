@@ -27,13 +27,24 @@ namespace numberDetector.Controllers
         [ResponseType(typeof(Contact))]
         public IHttpActionResult GetContact(int id)
         {
-            Contact contact = db.Contacts.Find(id);
-            if (contact == null)
+            // Contact contact = db.Contacts.Find(id);
+
+
+            var contacts = db.Contacts
+                .Where(c => c.UserId == id)
+                .Select(c => new {
+                    Name = c.Name,
+                    Email = c.email,
+                    MoNumber = c.MoNumber
+                })
+                .ToList();
+
+            if (contacts == null)
             {
                 return NotFound();
             }
 
-            return Ok(contact);
+                return Ok(contacts);
         }
 
         // PUT: api/Contacts/5

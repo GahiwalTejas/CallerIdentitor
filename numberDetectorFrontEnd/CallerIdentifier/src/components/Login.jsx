@@ -204,7 +204,7 @@ const handleClose=()=>{
       }).then(()=>{
         setTimeout(() => {
           navigate("/userInfo");
-        }, 1000); // Redirect after 3 seconds
+        }, 2000); // Redirect after 3 seconds
       })
       .catch((err) => {
         console.log(err);

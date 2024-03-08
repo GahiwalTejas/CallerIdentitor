@@ -26,92 +26,133 @@ namespace numberDetector.Controllers
         [Route("Search")]
         public List<string> Search(string keyword)
         {
-
-            try
+            if (keyword.Length <= 10)
             {
-                int result = int.Parse(keyword); // This will throw a FormatException
-
-                List<string> list = new List<string>();
-                var resultContact = db.Contacts
-    .Where(contact => contact.MoNumber.StartsWith(keyword))
-    .Select(contact => new
-    {
-        contact.Name,
-        contact.email
-    })
-    .ToList();
-
-                // or .ToList() if you expect multiple results
-                if (resultContact.Count == 0)
+                try
                 {
-                    int resultSpam = db.Spams
-        .Where(spam => spam.MoNumber == keyword)
-        .Select(spam => spam.SpamId)
-        .FirstOrDefault(); // or .ToList() if you expect multiple results
+                    long result = long.Parse(keyword); // This will throw a FormatException
 
-                    if (resultSpam == 0)
+                    List<string> list = new List<string>();
+                    var resultContact = db.Contacts
+        .Where(contact => contact.MoNumber.StartsWith(keyword))
+        .Select(contact => new
+        {
+            contact.Name,
+            contact.email
+        })
+        .ToList();
+
+                    // or .ToList() if you expect multiple results
+                    if (resultContact.Count == 0)
                     {
-                        Spam newSpam = new Spam
+                        int resultSpam = db.Spams
+            .Where(spam => spam.MoNumber == keyword)
+            .Select(spam => spam.SpamId)
+            .FirstOrDefault(); // or .ToList() if you expect multiple results
+
+                        if (resultSpam == 0)
                         {
-                            MoNumber = keyword,
+                            if (keyword.Length == 10) {
+                                Spam newSpam = new Spam
+                                {
+                                    MoNumber = keyword,
 
-                        };
+                                };
 
-                        db.Spams.Add(newSpam);
-                        db.SaveChanges();
+                                db.Spams.Add(newSpam);
+                                db.SaveChanges();
+                                list.Add("Spam Number");
+
+                            }
+
+
+                        }
+
+                        list.Add("Spam Number");
+                        return list;
+
+
+
                     }
-
-                    list.Add("Spam Number");
-                    return list;
-
-
-
-                }
-                else
-                {
-                    foreach (var item in resultContact)
+                    else
                     {
-                        list.Add(item.Name + " " +item.email);
+                        foreach (var item in resultContact)
+                        {
+                            list.Add(item.Name + " " + item.email);
+                        }
+                        return list;
                     }
-                    return list;
+
+
+
                 }
+                catch (FormatException ex)
+                {
+                    Console.WriteLine($"Error: {ex.Message}");
+
+                    List<string> list2 = new List<string>();
+                    var results = db.Contacts
+                                 .Where(contact => contact.Name.StartsWith(keyword))
+                                 .Select(contact => new
+                                 {
+                                     contact.Name,
+                                     contact.MoNumber
+                                 })
+                                 .ToList();
+                    if (results.Count == 0)
+                    {
+                        list2.Add("Not Found");
+                        return list2;
+                    }
+                    else
+                    {
+                        foreach (var item in results)
+                        {
+                            list2.Add(item.MoNumber + "   " + item.Name);
+                        }
+                    }
 
 
 
+
+                    return list2;
+                }
             }
-            catch (FormatException ex)
+            else
             {
-                Console.WriteLine($"Error: {ex.Message}");
-
-                List<string> list2 = new List<string>();
+                List<string> list3 = new List<string>();
                 var results = db.Contacts
                              .Where(contact => contact.Name.StartsWith(keyword))
                              .Select(contact => new
-                              {
-                                contact.Name,
-                                contact.MoNumber
-                              })
+                             {
+                                 contact.Name,
+                                 contact.MoNumber
+                             })
                              .ToList();
-                if(results.Count == 0)
-                { list2.Add("Not Found");
-                    return list2;
+                if (results.Count == 0)
+                {
+                    list3.Add("Not Found");
+                    return list3;
                 }
-                else {
+                else
+                {
                     foreach (var item in results)
                     {
-                        list2.Add(item.MoNumber + "   " + item.Name);
+                        list3.Add(item.MoNumber + "   " + item.Name);
                     }
                 }
-                
 
 
 
-                return list2;
+
+                return list3;
+
+
+
             }
 
 
 
-            
 
 
 
@@ -119,7 +160,13 @@ namespace numberDetector.Controllers
 
 
 
-        }
+
+
+
+
+
+
+            }
 
 
 

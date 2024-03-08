@@ -81,7 +81,7 @@ const SearchComponent = () => {
             <p>This number is marked as spam.</p>
           ) : (
             <div className="bg-gray-200 p-10 m-4 rounded">
-              <p className="font-bold ">Contact Details:</p>
+              <p className="font-bold m-2 ">Search Result</p>
               <ul className="list-disc pl-6">
                 {searchResults.map((item) => (
                   <li

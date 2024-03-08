@@ -8,8 +8,8 @@ import { Outlet } from 'react-router-dom'
 
 function App() {
 
-  return (
-    <div className='min-h-screen flex flex-wrap content-between bg-gray-400'>
+  return (<>
+    <div className=' bg-gray-400'>
     <div className='w-full block'>
       <Header />
       <main>
@@ -18,7 +18,7 @@ function App() {
       <Footer />
     </div>
   </div>
-  )
+  </>)
 }
 
 export default App

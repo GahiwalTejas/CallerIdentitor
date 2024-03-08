@@ -30,6 +30,11 @@ export default function Header() {
       active: authStatus,
     },
     {
+      name: "MyContacts",
+      slug: "/contacts",
+      active: authStatus,
+    },
+    {
       name: "Search",
       slug: "/search",
       active: authStatus,
@@ -37,7 +42,7 @@ export default function Header() {
   ];
 
   return (
-    <header className="py-3 shadow bg-gray-500">
+    <header className="py-3 sticky shadow bg-gray-500">
       <Container>
         <nav className="flex">
           <div className="mr-4">

@@ -11,6 +11,7 @@ import { Provider } from "react-redux";
 import store from "./store/store.jsx";
 import AuthLayout from "./components/AuthLayout.jsx";
 import SearchPage from "./pages/SearchPage.jsx";
+import Contacts from "./pages/Contacts.jsx";
 
 const route = createBrowserRouter([
   {
@@ -42,6 +43,14 @@ const route = createBrowserRouter([
         element: (
           <AuthLayout authentication>
             <UserInfo />
+          </AuthLayout>
+        ),
+      },
+      {
+        path: "/contacts",
+        element: (
+          <AuthLayout authentication>
+            <Contacts />
           </AuthLayout>
         ),
       },

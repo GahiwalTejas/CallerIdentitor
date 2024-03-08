@@ -33,6 +33,7 @@ namespace numberDetector.Controllers
             var contacts = db.Contacts
                 .Where(c => c.UserId == id)
                 .Select(c => new {
+                    contact_id=c.ContactId,
                     Name = c.Name,
                     Email = c.email,
                     MoNumber = c.MoNumber
